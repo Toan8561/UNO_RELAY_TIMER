@@ -1,0 +1,7 @@
+{
+    "cmake.sourceDirectory": "C:/Users/PC/Documents/DO_AN_1/UNO_I2C_I-O/.pio/libdeps/uno/Unity",
+    "files.associations": {
+        "pgmspace.h": "c",
+        "menu_flash.h": "c"
+    }
+}

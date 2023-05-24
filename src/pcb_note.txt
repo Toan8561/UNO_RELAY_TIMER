@@ -1,0 +1,92 @@
+/*======================================================================================================================
+part 1: relay block
+
+linh kiện cho pdb:
++ https://icdayroi.com/in5819
++ https://icdayroi.com/pc817x2nsz9f-dip
++ https://icdayroi.com/hk3ff-dc5v-shg
++ https://icdayroi.com/dien-tro-240r-1-2w-5-goi-10-con
++ https://robocon.vn/detail/dt145-dien-tro-cam-240-ohm-240r-12w.html
+
+data-sheet cho linh kiện:
++ https://pdf1.alldatasheet.com/datasheet-pdf/view/333590/OMRON/G5LE-1.html
++ https://pdf1.alldatasheet.com/datasheet-pdf/view/1249023/EVER-WAY/HK3FF-DC5V-SHCXG.html
++ https://pdf1.alldatasheet.com/datasheet-pdf/view/43368/SHARP/PC817.html
++ https://pdf1.alldatasheet.com/datasheet-pdf/view/1042228/YIXIN/1N4007.html
++ https://pdf1.alldatasheet.com/datasheet-pdf/view/432386/MCC/MPSA44.html
++ https://www.onsemi.com/pdf/datasheet/2n3903-d.pdf
+
+chọn linh kiện:
++ https://electronics.stackexchange.com/questions/110574/how-to-choose-a-flyback-diode-for-a-relay
++ https://www.quora.com/How-much-current-does-the-coil-side-of-a-relay-draw#:~:text=Once%20you%20have%20these%20parameters,07%20amps.
++ https://electronics.stackexchange.com/questions/369447/selecting-a-switching-transistor-for-a-5v-relay
+
+schematic:
++ https://components101.com/switches/5v-single-channel-relay-module-pinout-features-applications-working-datasheet
++ https://handsontec.com/dataspecs/relay/1Ch-relay.pdf
+
+video nguyên lý (ENG)
++ https://www.youtube.com/watch?v=FWvEEtrTGRQ
++ https://www.youtube.com/watch?v=3AVHqV_xASQ
+
+code: 
++ https://lastminuteengineers.com/two-channel-relay-module-arduino-tutorial/
++ https://www.elprocus.com/arduino-relay/
+
+======================================================================================================================*/
+
+/*======================================================================================================================
+part 2: khối nguồn
+
+linh kiện cho pdb:
++ https://icdayroi.com/module-nguon-ac-dc-hlk-5m09-220v-9v-5w
++ https://icdayroi.com/module-nguon-ac-dc-hlk-5m12-220v-12v-5w
++ https://www.thegioiic.com/products?search=AC-DC+9V
++ https://icdayroi.com/tu-vang-1uf-275v-22-5mm
++ https://icdayroi.com/tu-chong-set-varistor-14d561k
++ https://icdayroi.com/cau-chi-nhiet-85-do-10a-250v-tf-ry-85
++ https://www.thegioiic.com/ry73-cau-chi-nhiet-73-do-c-250vac-10a
++ https://icdayroi.com/de-cau-chi-blx-a-5x20mm
++ https://www.thegioiic.com/hb762-2-terminal-khoi-han-pcb-2-cuc-24a-450v-7-62mm
++ https://www.thegioiic.com/minismdc075f-2-cau-chi-tu-phuc-hoi-1812-13v-750ma
++ https://www.thegioiic.com/l7809cv-ic-on-ap-9v-500ma
++ https://icdayroi.com/hk3ff-dc5v-shg
++ https://www.thegioiic.com/kf1000-8-terminal-khoi-han-pcb-8-cuc-25a-450v-10mm
++ https://www.thegioiic.com/cau-chi-su-8a-5x20mm
+
+
+data-sheet cho linh kiện:
++ https://www.alldatasheet.com/view.jsp?Searchword=7805%20datasheet&gclid=Cj0KCQjwu-KiBhCsARIsAPztUF097OKe_oeiuZZAGPUusVCBDvwewlHxmCV6P3jIaOLIxtTADcQc-RMaAm6aEALw_wcB
++ https://drive.google.com/file/d/1_UaUPWX9K5Bfavle4C1imVY0-WjY4yso/view
++ https://pdf1.alldatasheet.com/datasheet-pdf/view/555616/WPI/10D561K.html
++ https://www.mouser.vn/c/ds/passive-components/capacitors/film-capacitors/?capacitance=0.22%20uF&dielectric=Polypropylene%20%28PP%29&lead%20spacing=22.5%20mm&product=AC%20and%20Pulse%20Film%20Capacitors&termination%20style=Radial&tolerance=5%20%25&voltage%20rating%20dc=630%20VDC
++ https://datasheetspdf.com/pdf/486379/NEC/SF70E/1
++ https://pdf1.alldatasheet.com/datasheet-pdf/view/4476/MOTOROLA/7808.html
++ https://www.alldatasheet.com/view.jsp?Searchword=L7812CV
+
+
+chọn linh kiện:
+
+
+
+schematic:
++ https://www.openhardware.io/view/504/HLK-PM01-breakout-board#tabs-bom
+
+video nguyên lý (ENG):
++ https://www.youtube.com/watch?v=-JD3E7e0RAE
++ https://www.youtube.com/watch?v=xodLuR6C8N4
+
+documentation:
++ https://docs.arduino.cc/learn/electronics/power-pins
+======================================================================================================================*/
+
+/*======================================================================================================================
+part 3: tính toán thông số.
++ https://www.4pcb.com/trace-width-calculator.html
++ https://www.apogeeweb.net/tools/external-pcb-trace-max-current.html
++ https://www.mclpcb.com/blog/pcb-trace-width-vs-current-table/#:~:text=You%20can%20calculate%20maximum%20current,mils2%5D%20T%3A%20Trace%20thickness.
+
+các thành phần khác
+https://www.circuitbasics.com/pull-up-and-pull-down-resistors/
+
+======================================================================================================================*/

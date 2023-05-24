@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../IOT_TIMER/UNO_TIMER"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"menu.h": "c"
+		}
+	}
+}

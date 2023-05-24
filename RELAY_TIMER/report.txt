@@ -1,0 +1,1 @@
+Update footprint J17 from 'TerminalBlock_RND:TerminalBlock_RND_205-00233_1x03_P5.08mm_Horizontal' to 'TerminalBlock_RND:TerminalBlock_RND_205-00233_1x03_P5.08mm_Horizontal': OK

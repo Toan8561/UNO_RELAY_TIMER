@@ -1,0 +1,30 @@
+05-24 03:34:01 com_github_MitjaNemec_SaveRestoreLayout.action_save_restore_layout 172:Plugin executed on: 'win32'
+05-24 03:34:01 com_github_MitjaNemec_SaveRestoreLayout.action_save_restore_layout 173:Plugin executed with python version: '3.9.14 (main, Dec 23 2022, 23:36:19) [MSC v.1934 64 bit (AMD64)]'
+05-24 03:34:01 com_github_MitjaNemec_SaveRestoreLayout.action_save_restore_layout 174:KiCad build version: (6.0.11)
+05-24 03:34:01 com_github_MitjaNemec_SaveRestoreLayout.action_save_restore_layout 175:Plugin version: 1.1.11
+05-24 03:34:01 com_github_MitjaNemec_SaveRestoreLayout.action_save_restore_layout 176:Frame repr: <wx._core.Frame object at 0x000001D4FF7E78B0>
+05-24 03:34:01 com_github_MitjaNemec_SaveRestoreLayout.action_save_restore_layout 194:Anchor footprint reference is 'J2'
+05-24 03:34:05 com_github_MitjaNemec_SaveRestoreLayout.action_save_restore_layout 203:Save layout chosen
+05-24 03:34:05 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 333:Working on C:\Users\PC\Documents\DO_AN_1\RELAY_SHEILD_V2\RELAY_SHEILD_V2\RELAY_SHEILD_V2.kicad_pcb
+05-24 03:34:05 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 132:getting a list of all footprints on board
+05-24 03:34:05 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 338:Saving the current board temporary in order to leave current layout intact
+05-24 03:34:05 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 344:Saving board as tempfile: C:\Users\PC\AppData\Local\Temp\temp_board_file_for_save.kicad_pcb
+05-24 03:34:05 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 349:Loaded temp boardfile: C:\Users\PC\AppData\Local\Temp\temp_board_file_for_save.kicad_pcb
+05-24 03:34:05 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 350:Get project schematics and layout data
+05-24 03:34:05 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 132:getting a list of all footprints on board
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.action_save_restore_layout 250:Saving the layout in 'C:\\Users\\PC\\Documents\\DO_AN_1\\RELAY_SHEILD_V2\\RELAY_SHEILD_V2\\RELAY_BLOCK_V2.pckl' for level 0
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 361:Saving layout for level: ['RELAY_BLOCK_1']
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 362:Calculating hash of the layout schematics
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 366:Saving hash for files: ['RELAY_BLOCK_V2.kicad_sch']
+05-24 03:34:24 root 377:Source footprints are: ['J1', 'K1', 'J2', 'D1', 'F1', 'R2', 'R3', 'D2', 'Q1', 'R1', 'U1']
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 388:Removing everything else from the layout
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 455:Removing text
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 434:Removing drawing
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 476:Removing zones
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 495:Removing tracks
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 497:Bounding box points: (41470000, 88395000, 29150000, 52575000)
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 518:Removing footprints
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 406:Saving layout in temporary file
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 410:Reading layout as text
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 417:Saving layout data
+05-24 03:34:24 com_github_MitjaNemec_SaveRestoreLayout.save_restore_layout 431:Successfully saved the layout

@@ -1,0 +1,34 @@
+int Realay_addr = 0x39; 
+uint8_t LED_Pattern = 0xFE;
+
+uint32_t start, stop;
+
+
+void setup()
+{
+  // I2C init
+  Wire.begin();            
+  
+  // Turn off all GPIO pins on both I2C expanders by writing all "1"
+  Wire.beginTransmission(Realay_addr);
+  Wire.write(0x00);
+  Wire.endTransmission();
+
+}
+
+
+void loop()
+{
+  LED_Pattern = 0xFE;
+  for (int i = 0; i < 8; i++){
+    Wire.beginTransmission(Realay_addr);
+    Wire.write(LED_Pattern);
+    Wire.endTransmission();
+    LED_Pattern = LED_Pattern << 1;  // Shift all bits left, moving the "0" along to turn on the next LED
+    bitSet (LED_Pattern, 0);         // Set the LSB to "1" after shifting left so a "1" is piped in to keep trailing LEDs off
+                                     // since shifting left will leave a "0" to the right, which will turn on an LED
+    
+    delay(300);  
+    }
+                        // LED chase display pause
+}
