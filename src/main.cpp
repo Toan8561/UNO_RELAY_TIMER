@@ -43,7 +43,7 @@ void loop(){
   if(chart != 'N') lcd.println(chart);
   else lcd.println();
 
-  Serial.println(num);
+  // Serial.println(num);
 
 }
 
