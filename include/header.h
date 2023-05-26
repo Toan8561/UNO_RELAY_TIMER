@@ -77,17 +77,27 @@ void DS1307_time_store(){
 }
 
 void DS1307_time_update(){
-    #ifdef TIME_UPDATE
+    if(Serial){
+        rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); 
+        DS1037_get_time(); 
+        DS1307_time_store(); 
+    }
+    else{
         uint8_t readData[6] = {0};
         rtc.readnvram(readData, 6, 0);
         rtc.adjust(DateTime(readData[0]+2000, readData[1], readData[2], readData[3], readData[4], readData[5]));
+    }
+    // #ifdef TIME_UPDATE
+    //     uint8_t readData[6] = {0};
+    //     rtc.readnvram(readData, 6, 0);
+    //     rtc.adjust(DateTime(readData[0]+2000, readData[1], readData[2], readData[3], readData[4], readData[5]));
 
-    #else
-        rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); 
-        DS1037_get_time(); 
-        DS1307_time_store();  
-        #define TIME_UPDATE
-    #endif
+    // #else
+    //     rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); 
+    //     DS1037_get_time(); 
+    //     DS1307_time_store();  
+    //     #define TIME_UPDATE
+    // #endif
     
 }  
 

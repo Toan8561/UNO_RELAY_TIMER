@@ -7,8 +7,8 @@ void setup(){
   DS1307_init();
   LCD_startup();
 
-  randomSeed(analogRead(A0));
-  num = random(lower, upper);
+  // randomSeed(analogRead(A0));
+  // num = random(lower, upper);
 
   /* Thực hiện nạp dữ liệu thời gian tại lúc build vào firmware */
 
