@@ -35,28 +35,29 @@ void loop(){
   char chart = interrupts_getkey(keyChange);
   if(chart !='N'){
     if(chart == 'A') {
-      if(chart == 'A') delay(150);
-      select = (select==1)?3:select-1;
-      // switch(menu->MenuID){
-      //   case Got_Title: select = (select==1)?3:select-1; break;
-      //   case Main_Menu: select = (select==1)?3:select-1; break;
-      //   default: select = (select==0)?3:select-1;
+      if(chart == 'A') delay(200);
+      // select = (select==1)?3:select-1;
+      switch(menu->MenuID){
+        case Got_Title: select = (select==1)?3:select-1; break;
+        case Main_Menu: select = (select==1)?3:select-1; break;
+        default: select = (select==0)?3:select-1;
 
-      // }
+      }
     }
 
     if(chart == 'D') {
-      if(chart == 'D') delay(150);
-      select = (select==3)?1:select+1;
-      // switch(menu->MenuID){
-      //   case Got_Title: select = (select==3)?1:select+1; break;
-      //   case Main_Menu: select = (select==3)?1:select+1; break;
-      //   default: select = (select==3)?0:select+1;
-      // }
+      if(chart == 'D') delay(200);
+      // select = (select==3)?1:select+1;
+      switch(menu->MenuID){
+        case Got_Title: select = (select==3)?1:select+1; break;
+        case Main_Menu: select = (select==3)?1:select+1; break;
+        default: select = (select==3)?0:select+1;
+      }
     }
 
     if(chart == 'C') {
       switch (select){
+      case 0: menu=(menu->Menulist0==NULL)?menu:menu->Menulist0; break;
       case 1: menu=(menu->Menulist1==NULL)?menu:menu->Menulist1; break;
       case 2: menu=(menu->Menulist2==NULL)?menu:menu->Menulist2; break;
       case 3: menu=(menu->Menulist3==NULL)?menu:menu->Menulist3; break;
@@ -72,7 +73,8 @@ void loop(){
     MenuDisplay(menu,select);
     
   }
-  // if(menu->MenuID==Main_Menu) LCD_print_time();
+  if(menu->MenuID==Main_Menu) LCD_print_time();
+  
   // else LCD_print_time(menu);
   // else Serial.println("No key push");
   // if(chart != 'N') Serial.println(chart);

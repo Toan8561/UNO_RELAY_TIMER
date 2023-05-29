@@ -220,7 +220,7 @@ char interrupts_getkey(bool IRQ_flag){
 
 int select=1, new_menu = 0;
 void MenuDisplay(Menu *menu, int select){
-    lcd.setCursor(0,0); lcd.print(menu->Title);
+    lcd.setCursor(0,0); lcd.print(menu->List0);
     lcd.setCursor(0,1); lcd.print(menu->List1);
     lcd.setCursor(0,2); lcd.print(menu->List2);
     lcd.setCursor(0,3); lcd.print(menu->List3);
