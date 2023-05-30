@@ -69,6 +69,11 @@ void loop(){
       menu=(menu->pre==NULL)?menu:menu->pre;
       new_menu=1;
     }
+
+    if(chart == '*') {
+      ActualActivation(menu,select);
+    }
+
     if(new_menu) {  lcd.clear();  new_menu = 0; }
     MenuDisplay(menu,select);
     
@@ -79,6 +84,4 @@ void loop(){
   // else Serial.println("No key push");
   // if(chart != 'N') Serial.println(chart);
   // else Serial.println("No key map connection");
-
-  
 }

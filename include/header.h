@@ -14,6 +14,23 @@
 #else
 #define printByte(args)  print(args,BYTE);
 #endif
+
+struct Relay_bite{
+    unsigned char RL1: 1;
+    unsigned char RL2: 1;
+    unsigned char RL3: 1;
+    unsigned char RL4: 1;
+    unsigned char RL5: 1;
+    unsigned char RL6: 1;
+    unsigned char RL7: 1;
+    unsigned char RL8: 1;
+};
+
+union RL{
+    
+};
+
+
 /*==== Sài lcd.write() để thay thế ====*/
 
 /*==== I2C COMMUNACATION ====*/
@@ -228,3 +245,111 @@ void MenuDisplay(Menu *menu, int select){
     // lcd.setCursor(0,select); lcd.print(">");
     lcd.setCursor(0,select); lcd.write(1);
 } 
+
+void ActualActivation(Menu *menu, int select){
+    switch (menu->MenuID){
+
+    case Relay14Set:
+        switch (select){
+        case 0:
+
+            break;
+
+        case 1:
+        
+            break;
+
+        case 2:
+        
+            break;
+
+        case 3:
+        
+            break;
+        }
+        break;
+
+    case Relay58Set:
+        switch (select){
+        case 0:
+
+            break;
+
+        case 1:
+        
+            break;
+
+        case 2:
+        
+            break;
+
+        case 3:
+        
+            break;
+        }
+        break;
+
+    case Relay14T:
+        switch (select){
+        case 0:
+
+            break;
+
+        case 1:
+        
+            break;
+
+        case 2:
+        
+            break;
+
+        case 3:
+        
+            break;
+        }
+        break;
+    
+    case Relay58T:
+        switch (select){
+        case 0:
+
+            break;
+
+        case 1:
+        
+            break;
+
+        case 2:
+        
+            break;
+
+        case 3:
+        
+            break;
+        }
+        break;
+
+    case SetTime:
+        switch (select){
+        case 0:
+
+            break;
+
+        case 1:
+        
+            break;
+
+        case 2:
+        
+            break;
+
+        case 3:
+        
+            break;
+        }
+        break;
+    
+    default:
+        break;
+    }
+}
