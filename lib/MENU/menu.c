@@ -32,13 +32,13 @@ Menu Manual = {
     &MainMenu,
     " MANUAL SETTING ",NULL,
     "  ON/OFF RELAY  ",&OnOffState,
-    "  SET TIME/DAY  ",NULL,
+    "  SET TIME/DAY  ",&SetInTime,
     "  ALARM SOUND   ",NULL,
 };
 
 Menu SetInTime = {
 //  "                ",
-    Got_Title,
+    SetTime,
     &Manual,
     " FORMAT:        ",NULL,
     " |              ",NULL,
@@ -48,7 +48,7 @@ Menu SetInTime = {
 
 Menu OnOffState = {
 //  "                ",
-    Got_Title,
+    OnOffRelay,
     &Manual,
     "SET RELAY STATES",NULL,
     "  RELAY 1-4     ",&Relay14Toggle,

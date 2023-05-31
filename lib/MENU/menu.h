@@ -9,6 +9,7 @@
 #define Relay14T 5
 #define Relay58T 6 
 #define SetTime 7 
+#define OnOffRelay 8
 
 
 typedef struct Linker {
@@ -21,7 +22,7 @@ typedef struct Linker {
 } Menu;
 
 extern Menu MainMenu, TimerMenu, Manual, 
-            OnOffState,
+            OnOffState, SetInTime,
             Relay14Toggle, Relay58Toggle, 
             Relay14Timer, Relay58Timer ;
 

@@ -15,21 +15,25 @@
 #define printByte(args)  print(args,BYTE);
 #endif
 
+#define bitflip(byte,nbit)  ((byte) ^=  (1<<(nbit)))
+
 struct Relay_bite{
-    unsigned char RL1: 1;
-    unsigned char RL2: 1;
-    unsigned char RL3: 1;
-    unsigned char RL4: 1;
-    unsigned char RL5: 1;
-    unsigned char RL6: 1;
-    unsigned char RL7: 1;
-    unsigned char RL8: 1;
+    unsigned char RL1: 1 ;
+    unsigned char RL2: 1 ;
+    unsigned char RL3: 1 ;
+    unsigned char RL4: 1 ;
+    unsigned char RL5: 1 ;
+    unsigned char RL6: 1 ;
+    unsigned char RL7: 1 ;
+    unsigned char RL8: 1 ;
 };
 
 union RL{
-    
+    unsigned char relayall ;
+    struct Relay_bite relay ;
 };
 
+union RL relays ; 
 
 /*==== Sài lcd.write() để thay thế ====*/
 
@@ -40,7 +44,7 @@ RTC_DS1307 rtc;
 uint8_t second_buff;
 
 typedef struct Time_buffer{
-    uint8_t WEEK_D;
+    // uint8_t WEEK_D;
     uint8_t DAY;
     uint8_t MONTH;
     uint8_t YEAR;
@@ -49,6 +53,7 @@ typedef struct Time_buffer{
     uint8_t SECOND;
 } TIME;
 TIME DS1307_TIME;
+TIME TIMER[8]={0};
 
 // char daysOfTheWeek[7][12] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thusday", "Friday", "Saturday"};
@@ -74,7 +79,7 @@ void DS1037_get_time(){
     TIME *p;
     DateTime now = rtc.now();
     p=&DS1307_TIME;
-    p->WEEK_D=now.dayOfTheWeek();
+    // p->WEEK_D=now.dayOfTheWeek();
     p->DAY= now.day();
     p->MONTH= now.month();
     p->YEAR=now.year()- 2000; //đọc năm, bỏ phần 20 trong 2000
@@ -137,25 +142,19 @@ void LCD_SpecChars(){
     lcd.createChar(7, battery[3]);
                     }
 
-// void LCD_write_white(){
-//     lcd.home();
-//     lcd.setCursor(0,0); lcd.print("                    ");
-//     lcd.setCursor(0,1); lcd.print("                    ");
-//     lcd.setCursor(0,2); lcd.print("                    ");
-//     lcd.setCursor(0,3); lcd.print("                    ");
-// }
-
 /*LCD_date need 12-14 space in LCD*/
 void LCD_print_time(){
+        DateTime now = rtc.now();
         TIME *p;
         p=&DS1307_TIME;
-        int week= p->WEEK_D, day= p->DAY, month= p->MONTH, year=p->YEAR, hour= p->HOUR, minute= p->MINUTE; 
+        // int week= p->WEEK_D, day= p->DAY, month= p->MONTH, year=p->YEAR, hour= p->HOUR, minute= p->MINUTE; 
+        int day= p->DAY, month= p->MONTH, year=p->YEAR, hour= p->HOUR, minute= p->MINUTE; 
         int second= p->SECOND;
         lcd.home(); //đưa con trỏ đến vị trí 0,0
         lcd.setCursor(9,0); 
         lcd.print("|");
         lcd.print(" ");
-        lcd.print(daysOfTheWeek[week]);
+        lcd.print(daysOfTheWeek[now.dayOfTheWeek()]);
         // lcd.setCursor(4,0);
 
         lcd.setCursor(9,1);
@@ -234,6 +233,55 @@ char interrupts_getkey(bool IRQ_flag){
     return chart;
 }
 
+int getData() {
+  String container = "";
+  lcd.setCursor(0, 1);
+  while (true) {
+    char chart = interrupts_getkey(keyChange);
+    if (chart == '*') break;
+    else if (isDigit(chart)) {
+      container += chart;
+      lcd.print(chart);
+    } else {
+      //Nothing
+    }
+    delay(200);
+  }
+  return container.toInt();
+}
+
+void SetTimer(TIME *p){
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Enter Year: ");
+    p->YEAR = getData()-2000;
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Enter Month: ");
+    p->MONTH = getData();
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Enter Day: ");
+    p->DAY = getData();
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Enter Hours: ");
+    p->HOUR = getData();
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Enter Minutes: ");
+    p->MINUTE = getData();
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Enter Seconds: ");
+    p->SECOND = getData();
+}
 
 int select=1, new_menu = 0;
 void MenuDisplay(Menu *menu, int select){
@@ -247,24 +295,25 @@ void MenuDisplay(Menu *menu, int select){
 } 
 
 void ActualActivation(Menu *menu, int select){
+    TIME *p;
     switch (menu->MenuID){
 
     case Relay14Set:
         switch (select){
         case 0:
-
+            relays.relay.RL1 = !(relays.relay.RL1);
             break;
 
         case 1:
-        
+            relays.relay.RL2 = !(relays.relay.RL2);
             break;
 
         case 2:
-        
+            relays.relay.RL3 = !(relays.relay.RL3);
             break;
 
         case 3:
-        
+            relays.relay.RL4 = !(relays.relay.RL4);
             break;
         }
         break;
@@ -272,19 +321,19 @@ void ActualActivation(Menu *menu, int select){
     case Relay58Set:
         switch (select){
         case 0:
-
+            relays.relay.RL5 = !(relays.relay.RL5);
             break;
 
         case 1:
-        
+            relays.relay.RL6 = !(relays.relay.RL6);
             break;
 
         case 2:
-        
+            relays.relay.RL7 = !(relays.relay.RL7);
             break;
 
         case 3:
-        
+            relays.relay.RL8 = !(relays.relay.RL8);
             break;
         }
         break;
@@ -292,19 +341,23 @@ void ActualActivation(Menu *menu, int select){
     case Relay14T:
         switch (select){
         case 0:
-
+            p=&TIMER[0];
+            SetTimer(p);
             break;
 
         case 1:
-        
+            p=&TIMER[1];
+            SetTimer(p);
             break;
 
         case 2:
-        
+            p=&TIMER[2];
+            SetTimer(p);
             break;
 
         case 3:
-        
+            p=&TIMER[3];
+            SetTimer(p);
             break;
         }
         break;
@@ -312,19 +365,23 @@ void ActualActivation(Menu *menu, int select){
     case Relay58T:
         switch (select){
         case 0:
-
+            p=&TIMER[4];
+            SetTimer(p);
             break;
 
         case 1:
-        
+            p=&TIMER[5];
+            SetTimer(p);
             break;
 
         case 2:
-        
+            p=&TIMER[6];
+            SetTimer(p);
             break;
 
         case 3:
-        
+            p=&TIMER[7];
+            SetTimer(p);
             break;
         }
         break;
@@ -332,7 +389,7 @@ void ActualActivation(Menu *menu, int select){
     case SetTime:
         switch (select){
         case 0:
-
+            
             break;
 
         case 1:
@@ -348,8 +405,69 @@ void ActualActivation(Menu *menu, int select){
             break;
         }
         break;
+
+    case OnOffRelay:
+        if(select==3) relays.relayall = relays.relayall ^ 0xFF;
+        break;
     
     default:
         break;
     }
 }
+
+void ActivationDisplay(Menu *menu){
+    switch (menu->MenuID){
+
+    case Relay14Set:
+        lcd.setCursor(12,0);
+        if(!(relays.relay.RL1)) lcd.print("ON");
+        else lcd.print("OFF");
+
+        lcd.setCursor(12,1);
+        if(!(relays.relay.RL2)) lcd.print("ON");
+        else lcd.print("OFF");
+
+        lcd.setCursor(12,2);
+        if(!(relays.relay.RL3)) lcd.print("ON");
+        else lcd.print("OFF");
+
+        lcd.setCursor(12,3);
+        if(!(relays.relay.RL4)) lcd.print("ON");
+        else lcd.print("OFF");
+        break;
+
+    case Relay58Set:
+        lcd.setCursor(12,0);
+        if(!(relays.relay.RL5)) lcd.print("ON");
+        else lcd.print("OFF");
+
+        lcd.setCursor(12,1);
+        if(!(relays.relay.RL6)) lcd.print("ON");
+        else lcd.print("OFF");
+
+        lcd.setCursor(12,2);
+        if(!(relays.relay.RL7)) lcd.print("ON");
+        else lcd.print("OFF");
+
+        lcd.setCursor(12,3);
+        if(!(relays.relay.RL8)) lcd.print("ON");
+        else lcd.print("OFF");
+        break;
+
+    case Relay14T:
+        
+        break;
+    
+    case Relay58T:
+
+        break;
+
+    case SetTime:
+
+        break;
+    
+    default:
+        break;
+    }
+}
+

@@ -3,8 +3,8 @@
 Menu *menu = &MainMenu;
 
 void setup(){
-  // Serial.begin(115200);
-  // Serial.println(__FILE__);
+  Serial.begin(115200);
+  Serial.println(__FILE__);
 
   Wire.begin();
   Wire.setClock(700000);
@@ -21,7 +21,8 @@ void setup(){
 
   /* Thực hiện nạp dữ liệu thời gian tại lúc build vào firmware */
   DS1307_time_update();
-  
+
+  relays.relayall = 0xFF;
 }
 
 void loop(){
@@ -40,6 +41,7 @@ void loop(){
       switch(menu->MenuID){
         case Got_Title: select = (select==1)?3:select-1; break;
         case Main_Menu: select = (select==1)?3:select-1; break;
+        case OnOffRelay: select = (select==1)?3:select-1; break;
         default: select = (select==0)?3:select-1;
 
       }
@@ -51,11 +53,13 @@ void loop(){
       switch(menu->MenuID){
         case Got_Title: select = (select==3)?1:select+1; break;
         case Main_Menu: select = (select==3)?1:select+1; break;
+        case OnOffRelay: select = (select==3)?1:select+1; break;
         default: select = (select==3)?0:select+1;
       }
     }
 
     if(chart == 'C') {
+      if(chart == 'C') delay(200);
       switch (select){
       case 0: menu=(menu->Menulist0==NULL)?menu:menu->Menulist0; break;
       case 1: menu=(menu->Menulist1==NULL)?menu:menu->Menulist1; break;
@@ -66,20 +70,56 @@ void loop(){
     }
 
     if(chart == 'B') {
+      if(chart == 'B') delay(200);
       menu=(menu->pre==NULL)?menu:menu->pre;
       new_menu=1;
     }
-
+    
     if(chart == '*') {
+      if(chart == '*') delay(200);
       ActualActivation(menu,select);
+      new_menu=1;
     }
 
     if(new_menu) {  lcd.clear();  new_menu = 0; }
     MenuDisplay(menu,select);
     
   }
+  ActivationDisplay(menu);
   if(menu->MenuID==Main_Menu) LCD_print_time();
   
+
+  Serial.println(relays.relayall, HEX);
+  for(int i=0 ; i<8 ; i++){
+    Serial.print("TIMER["); Serial.print(i); Serial.print("]: ");
+    Serial.print(TIMER[i].YEAR+2000, DEC);
+    Serial.print("/");
+    Serial.print(TIMER[i].MONTH, DEC);
+    Serial.print("/");
+    Serial.print(TIMER[i].DAY, DEC);
+    Serial.print("-");
+    Serial.print(TIMER[i].HOUR, DEC);
+    Serial.print(":");
+    Serial.print(TIMER[i].MINUTE, DEC);
+    Serial.print(":");
+    Serial.print(TIMER[i].SECOND, DEC);
+    Serial.println(" ");
+  }
+  
+  Serial.print("RTC:"); 
+    Serial.print(DS1307_TIME.YEAR+2000, DEC);
+    Serial.print("/");
+    Serial.print(DS1307_TIME.MONTH, DEC);
+    Serial.print("/");
+    Serial.print(DS1307_TIME.DAY, DEC);
+    Serial.print("-");
+    Serial.print(DS1307_TIME.HOUR, DEC);
+    Serial.print(":");
+    Serial.print(DS1307_TIME.MINUTE, DEC);
+    Serial.print(":");
+    Serial.print(DS1307_TIME.SECOND, DEC);
+    Serial.println(" ");
+
   // else LCD_print_time(menu);
   // else Serial.println("No key push");
   // if(chart != 'N') Serial.println(chart);
