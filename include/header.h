@@ -18,7 +18,8 @@
 #define bitflip(byte,nbit)  ((byte) ^=  (1<<(nbit)))
 
 struct Relay_bite{
-    unsigned char RL1: 1 ;
+    unsigned char 
+    : 1 ;
     unsigned char RL2: 1 ;
     unsigned char RL3: 1 ;
     unsigned char RL4: 1 ;
@@ -34,6 +35,26 @@ union RL{
 };
 
 union RL relays ; 
+
+// struct RelayTimerFlag{
+//     unsigned char RL1: 1 ;
+//     unsigned char RL2: 1 ;
+//     unsigned char RL3: 1 ;
+//     unsigned char RL4: 1 ;
+//     unsigned char RL5: 1 ;
+//     unsigned char RL6: 1 ;
+//     unsigned char RL7: 1 ;
+//     unsigned char RL8: 1 ;
+// };
+
+// union RelayTimer{
+//     unsigned char Timerall ;
+//     struct RelayTimerFlag Timer ;
+// };
+
+// union RelayTimer TimerFlag ; 
+
+unsigned char TimerFlag[8]={0};
 
 /*==== Sài lcd.write() để thay thế ====*/
 
@@ -235,64 +256,119 @@ char interrupts_getkey(bool IRQ_flag){
 
 int getData() {
   String container = "";
-  lcd.setCursor(0, 1);
+//   char last_chart;
+  int cursor=1;
+  lcd.setCursor(1, 1);
   while (true) {
     char chart = interrupts_getkey(keyChange);
+    delay(150);
     if (chart == '*') break;
     else if (isDigit(chart)) {
       container += chart;
+    //   last_chart = chart;
+      cursor += 1;
       lcd.print(chart);
-    } else {
+    }
+    // else if(chart == '#'){
+    //     container[cursor-1] = '\0';
+
+    //     cursor -=1;
+    //     cursor =(cursor==0)?1:(cursor);
+
+    //     lcd.setCursor(cursor,1);
+    //     lcd.print(" ");
+    //     lcd.setCursor(cursor,1);
+    // }
+    else {
       //Nothing
     }
-    delay(200);
   }
   return container.toInt();
 }
 
-void SetTimer(TIME *p){
-
+void SetTimer(TIME *p, unsigned char *Flag){
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Enter Year: ");
-    p->YEAR = getData()-2000;
+    lcd.home();
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Enter Month: ");
-    p->MONTH = getData();
+    char chart;
+    int buffer=0;
+    delay(150);
+    chart = interrupts_getkey(keyChange);
+    
+    while(chart=='N'){
+        lcd.clear();
+        lcd.home();
+        lcd.setCursor(0,0);
+        lcd.print("  SET TIMER MODE   ");
+        lcd.setCursor(0,2);
+        lcd.print("(*)EXIT   (#)ENTER ");
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Enter Day: ");
-    p->DAY = getData();
+        chart = interrupts_getkey(keyChange);
+        delay(150);
+    }
+    
+    switch (chart){
+    case '*':
+        break;
+    
+    case '#':
+        do{
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Enter Year: ");
+            buffer=getData();
+        } while ((buffer>2099)||(buffer<1970));
+        
+        p->YEAR = (uint8_t)(buffer-2000);
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Enter Hours: ");
-    p->HOUR = getData();
+        do{
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Enter Month: ");
+            buffer=getData();
+        } while ((buffer>12)||(buffer==0));
+        p->MONTH = (uint8_t)buffer;
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Enter Minutes: ");
-    p->MINUTE = getData();
+        do{
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Enter Day: ");
+            buffer=getData();
+        } while ((buffer>31)||(buffer==0));
+        p->DAY = (uint8_t)buffer;
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Enter Seconds: ");
-    p->SECOND = getData();
+        do{
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Enter Hours: ");
+            buffer=getData();
+        } while (buffer>23);
+        p->HOUR = (uint8_t)buffer;
+
+        do{
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Enter Minutes: ");
+            buffer=getData();
+        } while (buffer>59);
+        p->MINUTE = (uint8_t)buffer;
+
+        do{
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Enter Seconds: ");
+            buffer=getData();
+        } while (buffer>59);
+        p->SECOND = (uint8_t)buffer;
+
+        *Flag=1;
+        break;
+
+    default:
+        break;
+    }
 }
 
-int select=1, new_menu = 0;
-void MenuDisplay(Menu *menu, int select){
-    lcd.setCursor(0,0); lcd.print(menu->List0);
-    lcd.setCursor(0,1); lcd.print(menu->List1);
-    lcd.setCursor(0,2); lcd.print(menu->List2);
-    lcd.setCursor(0,3); lcd.print(menu->List3);
-
-    // lcd.setCursor(0,select); lcd.print(">");
-    lcd.setCursor(0,select); lcd.write(1);
-} 
 
 void ActualActivation(Menu *menu, int select){
     TIME *p;
@@ -342,22 +418,22 @@ void ActualActivation(Menu *menu, int select){
         switch (select){
         case 0:
             p=&TIMER[0];
-            SetTimer(p);
+            SetTimer(p, &TimerFlag[0]);
             break;
 
         case 1:
             p=&TIMER[1];
-            SetTimer(p);
+            SetTimer(p, &TimerFlag[1]);
             break;
 
         case 2:
             p=&TIMER[2];
-            SetTimer(p);
+            SetTimer(p, &TimerFlag[2]);
             break;
 
         case 3:
             p=&TIMER[3];
-            SetTimer(p);
+            SetTimer(p, &TimerFlag[3]);
             break;
         }
         break;
@@ -366,22 +442,22 @@ void ActualActivation(Menu *menu, int select){
         switch (select){
         case 0:
             p=&TIMER[4];
-            SetTimer(p);
+            SetTimer(p, &TimerFlag[4]);
             break;
 
         case 1:
             p=&TIMER[5];
-            SetTimer(p);
+            SetTimer(p, &TimerFlag[5]);
             break;
 
         case 2:
             p=&TIMER[6];
-            SetTimer(p);
+            SetTimer(p, &TimerFlag[6]);
             break;
 
         case 3:
             p=&TIMER[7];
-            SetTimer(p);
+            SetTimer(p, &TimerFlag[7]);
             break;
         }
         break;
@@ -455,11 +531,31 @@ void ActivationDisplay(Menu *menu){
         break;
 
     case Relay14T:
-        
+        lcd.setCursor(12,0);
+        if(TimerFlag[0]) lcd.write(2);
+
+        lcd.setCursor(12,1);
+        if(TimerFlag[1]) lcd.write(2);
+
+        lcd.setCursor(12,2);
+        if(TimerFlag[2]) lcd.write(2);
+
+        lcd.setCursor(12,3);
+        if(TimerFlag[3]) lcd.write(2);
         break;
     
     case Relay58T:
+        lcd.setCursor(12,0);
+        if(TimerFlag[4]) lcd.write(2);
 
+        lcd.setCursor(12,1);
+        if(TimerFlag[5])lcd.write(2);
+
+        lcd.setCursor(12,2);
+        if(TimerFlag[6]) lcd.write(2);
+
+        lcd.setCursor(12,3);
+        if(TimerFlag[7]) lcd.write(2);
         break;
 
     case SetTime:
@@ -471,3 +567,156 @@ void ActivationDisplay(Menu *menu){
     }
 }
 
+int select=1, new_menu = 0;
+void MenuDisplay(Menu *menu, int select){
+    lcd.setCursor(0,0); lcd.print(menu->List0);
+    lcd.setCursor(0,1); lcd.print(menu->List1);
+    lcd.setCursor(0,2); lcd.print(menu->List2);
+    lcd.setCursor(0,3); lcd.print(menu->List3);
+
+    // lcd.setCursor(0,select); lcd.print(">");
+    lcd.setCursor(0,select); lcd.write(1);
+} 
+
+int RelayI2C=0x39;
+
+void RelayOut(int Realay_addr, char Data){
+    Wire.beginTransmission(Realay_addr);
+    Wire.write(Data);
+    Wire.endTransmission();
+}
+
+void RelayAuto(){
+    TIME *p;
+    p=&DS1307_TIME;
+
+    uint8_t readData[6] = {0};
+    rtc.readnvram(readData, 6, 0);
+    if(TimerFlag[0]){
+        if((TIMER[0].YEAR <= p->YEAR)&&(TIMER[0].YEAR >= readData[0])){
+            if((TIMER[0].MONTH <= p->MONTH)&&(TIMER[0].MONTH >= readData[1])){
+                if((TIMER[0].DAY <= p->DAY)&&(TIMER[0].DAY >= readData[2])){
+                    if((TIMER[0].HOUR <= p->HOUR)&&(TIMER[0].HOUR >= readData[3])){
+                        if((TIMER[0].MINUTE <= p->MINUTE)&&(TIMER[0].MINUTE >= readData[4])){
+                            if((TIMER[0].SECOND <= p->SECOND)&&(TIMER[0].SECOND >= readData[5])){
+                                relays.relay.RL1 = !(relays.relay.RL1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }   
+
+    if(TimerFlag[1]){
+        if((TIMER[1].YEAR <= p->YEAR)&&(TIMER[1].YEAR >= readData[1])){
+            if((TIMER[1].MONTH <= p->MONTH)&&(TIMER[1].MONTH >= readData[1])){
+                if((TIMER[1].DAY <= p->DAY)&&(TIMER[1].DAY >= readData[2])){
+                    if((TIMER[1].HOUR <= p->HOUR)&&(TIMER[1].HOUR >= readData[3])){
+                        if((TIMER[1].MINUTE <= p->MINUTE)&&(TIMER[1].MINUTE >= readData[4])){
+                            if((TIMER[1].SECOND <= p->SECOND)&&(TIMER[1].SECOND >= readData[5])){
+                                relays.relay.RL2 = !(relays.relay.RL2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }   
+
+    if(TimerFlag[2]){
+        if((TIMER[2].YEAR <= p->YEAR)&&(TIMER[2].YEAR >= readData[2])){
+            if((TIMER[2].MONTH <= p->MONTH)&&(TIMER[2].MONTH >= readData[1])){
+                if((TIMER[2].DAY <= p->DAY)&&(TIMER[2].DAY >= readData[2])){
+                    if((TIMER[2].HOUR <= p->HOUR)&&(TIMER[2].HOUR >= readData[3])){
+                        if((TIMER[2].MINUTE <= p->MINUTE)&&(TIMER[2].MINUTE >= readData[4])){
+                            if((TIMER[2].SECOND <= p->SECOND)&&(TIMER[2].SECOND >= readData[5])){
+                                relays.relay.RL3 = !(relays.relay.RL3);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }   
+
+    if(TimerFlag[3]){
+        if((TIMER[3].YEAR <= p->YEAR)&&(TIMER[3].YEAR >= readData[3])){
+            if((TIMER[3].MONTH <= p->MONTH)&&(TIMER[3].MONTH >= readData[1])){
+                if((TIMER[3].DAY <= p->DAY)&&(TIMER[3].DAY >= readData[2])){
+                    if((TIMER[3].HOUR <= p->HOUR)&&(TIMER[3].HOUR >= readData[3])){
+                        if((TIMER[3].MINUTE <= p->MINUTE)&&(TIMER[3].MINUTE >= readData[4])){
+                            if((TIMER[3].SECOND <= p->SECOND)&&(TIMER[3].SECOND >= readData[5])){
+                                relays.relay.RL4 = !(relays.relay.RL4);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }   
+
+    if(TimerFlag[4]){
+        if((TIMER[4].YEAR <= p->YEAR)&&(TIMER[4].YEAR >= readData[4])){
+            if((TIMER[4].MONTH <= p->MONTH)&&(TIMER[4].MONTH >= readData[1])){
+                if((TIMER[4].DAY <= p->DAY)&&(TIMER[4].DAY >= readData[2])){
+                    if((TIMER[4].HOUR <= p->HOUR)&&(TIMER[4].HOUR >= readData[3])){
+                        if((TIMER[4].MINUTE <= p->MINUTE)&&(TIMER[4].MINUTE >= readData[4])){
+                            if((TIMER[4].SECOND <= p->SECOND)&&(TIMER[4].SECOND >= readData[5])){
+                                relays.relay.RL5 = !(relays.relay.RL5);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }   
+
+    if(TimerFlag[5]){
+        if((TIMER[5].YEAR <= p->YEAR)&&(TIMER[5].YEAR >= readData[5])){
+            if((TIMER[5].MONTH <= p->MONTH)&&(TIMER[5].MONTH >= readData[1])){
+                if((TIMER[5].DAY <= p->DAY)&&(TIMER[5].DAY >= readData[2])){
+                    if((TIMER[5].HOUR <= p->HOUR)&&(TIMER[5].HOUR >= readData[3])){
+                        if((TIMER[5].MINUTE <= p->MINUTE)&&(TIMER[5].MINUTE >= readData[4])){
+                            if((TIMER[5].SECOND <= p->SECOND)&&(TIMER[5].SECOND >= readData[5])){
+                                relays.relay.RL6 = !(relays.relay.RL6);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }   
+
+    if(TimerFlag[6]){
+        if((TIMER[6].YEAR <= p->YEAR)&&(TIMER[6].YEAR >= readData[6])){
+            if((TIMER[6].MONTH <= p->MONTH)&&(TIMER[6].MONTH >= readData[1])){
+                if((TIMER[6].DAY <= p->DAY)&&(TIMER[6].DAY >= readData[2])){
+                    if((TIMER[6].HOUR <= p->HOUR)&&(TIMER[6].HOUR >= readData[3])){
+                        if((TIMER[6].MINUTE <= p->MINUTE)&&(TIMER[6].MINUTE >= readData[4])){
+                            if((TIMER[6].SECOND <= p->SECOND)&&(TIMER[6].SECOND >= readData[5])){
+                                relays.relay.RL7 = !(relays.relay.RL7);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }   
+
+    if(TimerFlag[7]){
+        if((TIMER[7].YEAR <= p->YEAR)&&(TIMER[7].YEAR >= readData[7])){
+            if((TIMER[7].MONTH <= p->MONTH)&&(TIMER[7].MONTH >= readData[1])){
+                if((TIMER[7].DAY <= p->DAY)&&(TIMER[7].DAY >= readData[2])){
+                    if((TIMER[7].HOUR <= p->HOUR)&&(TIMER[7].HOUR >= readData[3])){
+                        if((TIMER[7].MINUTE <= p->MINUTE)&&(TIMER[7].MINUTE >= readData[4])){
+                            if((TIMER[7].SECOND <= p->SECOND)&&(TIMER[7].SECOND >= readData[5])){
+                                relays.relay.RL8 = !(relays.relay.RL8);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }   
+}

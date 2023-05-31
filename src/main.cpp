@@ -23,9 +23,11 @@ void setup(){
   DS1307_time_update();
 
   relays.relayall = 0xFF;
+  // TimerFlag.Timerall = 0x00;
 }
 
 void loop(){
+  char buffer=relays.relayall;
   DS1037_get_time();
   TIME *p;
   p=&DS1307_TIME;
@@ -36,7 +38,7 @@ void loop(){
   char chart = interrupts_getkey(keyChange);
   if(chart !='N'){
     if(chart == 'A') {
-      if(chart == 'A') delay(200);
+      if(chart == 'A') delay(175);
       // select = (select==1)?3:select-1;
       switch(menu->MenuID){
         case Got_Title: select = (select==1)?3:select-1; break;
@@ -48,7 +50,7 @@ void loop(){
     }
 
     if(chart == 'D') {
-      if(chart == 'D') delay(200);
+      if(chart == 'D') delay(175);
       // select = (select==3)?1:select+1;
       switch(menu->MenuID){
         case Got_Title: select = (select==3)?1:select+1; break;
@@ -59,7 +61,7 @@ void loop(){
     }
 
     if(chart == 'C') {
-      if(chart == 'C') delay(200);
+      if(chart == 'C') delay(175);
       switch (select){
       case 0: menu=(menu->Menulist0==NULL)?menu:menu->Menulist0; break;
       case 1: menu=(menu->Menulist1==NULL)?menu:menu->Menulist1; break;
@@ -70,13 +72,13 @@ void loop(){
     }
 
     if(chart == 'B') {
-      if(chart == 'B') delay(200);
+      if(chart == 'B') delay(175);
       menu=(menu->pre==NULL)?menu:menu->pre;
       new_menu=1;
     }
     
     if(chart == '*') {
-      if(chart == '*') delay(200);
+      if(chart == '*') delay(175);
       ActualActivation(menu,select);
       new_menu=1;
     }
@@ -87,7 +89,10 @@ void loop(){
   }
   ActivationDisplay(menu);
   if(menu->MenuID==Main_Menu) LCD_print_time();
-  
+  if(buffer != relays.relayall) {
+    RelayOut(RelayI2C, relays.relayall);
+    buffer = relays.relayall;
+  }
 
   Serial.println(relays.relayall, HEX);
   for(int i=0 ; i<8 ; i++){
@@ -103,6 +108,9 @@ void loop(){
     Serial.print(TIMER[i].MINUTE, DEC);
     Serial.print(":");
     Serial.print(TIMER[i].SECOND, DEC);
+    Serial.print(" ");
+    Serial.print("Flag:");
+    Serial.print(TimerFlag[i]);
     Serial.println(" ");
   }
   
@@ -119,9 +127,5 @@ void loop(){
     Serial.print(":");
     Serial.print(DS1307_TIME.SECOND, DEC);
     Serial.println(" ");
-
-  // else LCD_print_time(menu);
-  // else Serial.println("No key push");
-  // if(chart != 'N') Serial.println(chart);
-  // else Serial.println("No key map connection");
+    
 }
