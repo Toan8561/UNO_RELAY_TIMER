@@ -128,4 +128,5 @@ void loop(){
     Serial.print(DS1307_TIME.SECOND, DEC);
     Serial.println(" ");
     
+    RelayAuto();
 }

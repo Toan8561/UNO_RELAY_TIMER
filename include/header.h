@@ -18,8 +18,7 @@
 #define bitflip(byte,nbit)  ((byte) ^=  (1<<(nbit)))
 
 struct Relay_bite{
-    unsigned char 
-    : 1 ;
+    unsigned char RL1: 1 ;
     unsigned char RL2: 1 ;
     unsigned char RL3: 1 ;
     unsigned char RL4: 1 ;
@@ -180,21 +179,21 @@ void LCD_print_time(){
 
         lcd.setCursor(9,1);
         lcd.print("|");
-        if (day <= 9){
+        if (day == 9){
             lcd.print("0");
             lcd.print(day);   }
         else lcd.print(day);
 
         lcd.print('/');
 
-        if (month <= 9){
+        if (month == 9){
             lcd.print("0");
             lcd.print(month); }
         else lcd.print(month);
 
         lcd.print('/');
 
-        if (year <= 9){
+        if (year == 9){
             lcd.print("0");
             lcd.print(year);   }
         else lcd.print(year);
@@ -203,21 +202,21 @@ void LCD_print_time(){
         // lcd.setCursor(13,0);
         lcd.setCursor(9,2);
         lcd.print("|");
-        if (hour <= 9){
+        if (hour == 9){
             lcd.print("0");
             lcd.print(hour);  }
         else lcd.print(hour);
 
         lcd.print(':');
 
-        if (minute <= 9){
+        if (minute == 9){
             lcd.print("0");
             lcd.print(minute);    }
         else lcd.print(minute);
 
         lcd.print(':');
 
-        if (second <= 9){
+        if (second == 9){
             lcd.print("0");
             lcd.print(second);    }
         else lcd.print(second);
@@ -593,13 +592,14 @@ void RelayAuto(){
     uint8_t readData[6] = {0};
     rtc.readnvram(readData, 6, 0);
     if(TimerFlag[0]){
-        if((TIMER[0].YEAR <= p->YEAR)&&(TIMER[0].YEAR >= readData[0])){
-            if((TIMER[0].MONTH <= p->MONTH)&&(TIMER[0].MONTH >= readData[1])){
-                if((TIMER[0].DAY <= p->DAY)&&(TIMER[0].DAY >= readData[2])){
-                    if((TIMER[0].HOUR <= p->HOUR)&&(TIMER[0].HOUR >= readData[3])){
-                        if((TIMER[0].MINUTE <= p->MINUTE)&&(TIMER[0].MINUTE >= readData[4])){
-                            if((TIMER[0].SECOND <= p->SECOND)&&(TIMER[0].SECOND >= readData[5])){
+        if(TIMER[0].YEAR == p->YEAR){
+            if(TIMER[0].MONTH == p->MONTH){
+                if(TIMER[0].DAY == p->DAY){
+                    if(TIMER[0].HOUR == p->HOUR){
+                        if(TIMER[0].MINUTE == p->MINUTE){
+                            if(TIMER[0].SECOND == p->SECOND){
                                 relays.relay.RL1 = !(relays.relay.RL1);
+                                TimerFlag[0]=0;
                             }
                         }
                     }
@@ -609,13 +609,14 @@ void RelayAuto(){
     }   
 
     if(TimerFlag[1]){
-        if((TIMER[1].YEAR <= p->YEAR)&&(TIMER[1].YEAR >= readData[1])){
-            if((TIMER[1].MONTH <= p->MONTH)&&(TIMER[1].MONTH >= readData[1])){
-                if((TIMER[1].DAY <= p->DAY)&&(TIMER[1].DAY >= readData[2])){
-                    if((TIMER[1].HOUR <= p->HOUR)&&(TIMER[1].HOUR >= readData[3])){
-                        if((TIMER[1].MINUTE <= p->MINUTE)&&(TIMER[1].MINUTE >= readData[4])){
-                            if((TIMER[1].SECOND <= p->SECOND)&&(TIMER[1].SECOND >= readData[5])){
+        if(TIMER[1].YEAR == p->YEAR){
+            if(TIMER[1].MONTH == p->MONTH){
+                if(TIMER[1].DAY == p->DAY){
+                    if(TIMER[1].HOUR == p->HOUR){
+                        if(TIMER[1].MINUTE == p->MINUTE){
+                            if(TIMER[1].SECOND == p->SECOND){
                                 relays.relay.RL2 = !(relays.relay.RL2);
+                                TimerFlag[1]=0;
                             }
                         }
                     }
@@ -625,13 +626,14 @@ void RelayAuto(){
     }   
 
     if(TimerFlag[2]){
-        if((TIMER[2].YEAR <= p->YEAR)&&(TIMER[2].YEAR >= readData[2])){
-            if((TIMER[2].MONTH <= p->MONTH)&&(TIMER[2].MONTH >= readData[1])){
-                if((TIMER[2].DAY <= p->DAY)&&(TIMER[2].DAY >= readData[2])){
-                    if((TIMER[2].HOUR <= p->HOUR)&&(TIMER[2].HOUR >= readData[3])){
-                        if((TIMER[2].MINUTE <= p->MINUTE)&&(TIMER[2].MINUTE >= readData[4])){
-                            if((TIMER[2].SECOND <= p->SECOND)&&(TIMER[2].SECOND >= readData[5])){
+        if(TIMER[2].YEAR == p->YEAR){
+            if(TIMER[2].MONTH == p->MONTH){
+                if(TIMER[2].DAY == p->DAY){
+                    if((TIMER[2].HOUR == p->HOUR)){
+                        if(TIMER[2].MINUTE == p->MINUTE){
+                            if(TIMER[2].SECOND == p->SECOND){
                                 relays.relay.RL3 = !(relays.relay.RL3);
+                                TimerFlag[2]=0;
                             }
                         }
                     }
@@ -641,13 +643,14 @@ void RelayAuto(){
     }   
 
     if(TimerFlag[3]){
-        if((TIMER[3].YEAR <= p->YEAR)&&(TIMER[3].YEAR >= readData[3])){
-            if((TIMER[3].MONTH <= p->MONTH)&&(TIMER[3].MONTH >= readData[1])){
-                if((TIMER[3].DAY <= p->DAY)&&(TIMER[3].DAY >= readData[2])){
-                    if((TIMER[3].HOUR <= p->HOUR)&&(TIMER[3].HOUR >= readData[3])){
-                        if((TIMER[3].MINUTE <= p->MINUTE)&&(TIMER[3].MINUTE >= readData[4])){
-                            if((TIMER[3].SECOND <= p->SECOND)&&(TIMER[3].SECOND >= readData[5])){
+        if(TIMER[3].YEAR == p->YEAR){
+            if(TIMER[3].MONTH == p->MONTH){
+                if(TIMER[3].DAY == p->DAY){
+                    if(TIMER[3].HOUR == p->HOUR){
+                        if(TIMER[3].MINUTE == p->MINUTE){
+                            if(TIMER[3].SECOND == p->SECOND){
                                 relays.relay.RL4 = !(relays.relay.RL4);
+                                TimerFlag[3]=0;
                             }
                         }
                     }
@@ -657,13 +660,14 @@ void RelayAuto(){
     }   
 
     if(TimerFlag[4]){
-        if((TIMER[4].YEAR <= p->YEAR)&&(TIMER[4].YEAR >= readData[4])){
-            if((TIMER[4].MONTH <= p->MONTH)&&(TIMER[4].MONTH >= readData[1])){
-                if((TIMER[4].DAY <= p->DAY)&&(TIMER[4].DAY >= readData[2])){
-                    if((TIMER[4].HOUR <= p->HOUR)&&(TIMER[4].HOUR >= readData[3])){
-                        if((TIMER[4].MINUTE <= p->MINUTE)&&(TIMER[4].MINUTE >= readData[4])){
-                            if((TIMER[4].SECOND <= p->SECOND)&&(TIMER[4].SECOND >= readData[5])){
+        if(TIMER[4].YEAR == p->YEAR){
+            if(TIMER[4].MONTH == p->MONTH){
+                if(TIMER[4].DAY == p->DAY){
+                    if(TIMER[4].HOUR == p->HOUR){
+                        if(TIMER[4].MINUTE == p->MINUTE){
+                            if(TIMER[4].SECOND == p->SECOND){
                                 relays.relay.RL5 = !(relays.relay.RL5);
+                                TimerFlag[4]=0;
                             }
                         }
                     }
@@ -673,13 +677,14 @@ void RelayAuto(){
     }   
 
     if(TimerFlag[5]){
-        if((TIMER[5].YEAR <= p->YEAR)&&(TIMER[5].YEAR >= readData[5])){
-            if((TIMER[5].MONTH <= p->MONTH)&&(TIMER[5].MONTH >= readData[1])){
-                if((TIMER[5].DAY <= p->DAY)&&(TIMER[5].DAY >= readData[2])){
-                    if((TIMER[5].HOUR <= p->HOUR)&&(TIMER[5].HOUR >= readData[3])){
-                        if((TIMER[5].MINUTE <= p->MINUTE)&&(TIMER[5].MINUTE >= readData[4])){
-                            if((TIMER[5].SECOND <= p->SECOND)&&(TIMER[5].SECOND >= readData[5])){
+        if(TIMER[5].YEAR == p->YEAR){
+            if(TIMER[5].MONTH == p->MONTH){
+                if(TIMER[5].DAY == p->DAY){
+                    if(TIMER[5].HOUR == p->HOUR){
+                        if(TIMER[5].MINUTE == p->MINUTE){
+                            if(TIMER[5].SECOND == p->SECOND){
                                 relays.relay.RL6 = !(relays.relay.RL6);
+                                TimerFlag[5]=0;
                             }
                         }
                     }
@@ -689,13 +694,14 @@ void RelayAuto(){
     }   
 
     if(TimerFlag[6]){
-        if((TIMER[6].YEAR <= p->YEAR)&&(TIMER[6].YEAR >= readData[6])){
-            if((TIMER[6].MONTH <= p->MONTH)&&(TIMER[6].MONTH >= readData[1])){
-                if((TIMER[6].DAY <= p->DAY)&&(TIMER[6].DAY >= readData[2])){
-                    if((TIMER[6].HOUR <= p->HOUR)&&(TIMER[6].HOUR >= readData[3])){
-                        if((TIMER[6].MINUTE <= p->MINUTE)&&(TIMER[6].MINUTE >= readData[4])){
-                            if((TIMER[6].SECOND <= p->SECOND)&&(TIMER[6].SECOND >= readData[5])){
+        if(TIMER[6].YEAR == p->YEAR){
+            if(TIMER[6].MONTH == p->MONTH){
+                if(TIMER[6].DAY == p->DAY){
+                    if(TIMER[6].HOUR == p->HOUR){
+                        if(TIMER[6].MINUTE == p->MINUTE){
+                            if(TIMER[6].SECOND == p->SECOND){
                                 relays.relay.RL7 = !(relays.relay.RL7);
+                                TimerFlag[6]=0;
                             }
                         }
                     }
@@ -705,13 +711,14 @@ void RelayAuto(){
     }   
 
     if(TimerFlag[7]){
-        if((TIMER[7].YEAR <= p->YEAR)&&(TIMER[7].YEAR >= readData[7])){
-            if((TIMER[7].MONTH <= p->MONTH)&&(TIMER[7].MONTH >= readData[1])){
-                if((TIMER[7].DAY <= p->DAY)&&(TIMER[7].DAY >= readData[2])){
-                    if((TIMER[7].HOUR <= p->HOUR)&&(TIMER[7].HOUR >= readData[3])){
-                        if((TIMER[7].MINUTE <= p->MINUTE)&&(TIMER[7].MINUTE >= readData[4])){
-                            if((TIMER[7].SECOND <= p->SECOND)&&(TIMER[7].SECOND >= readData[5])){
+        if(TIMER[7].YEAR == p->YEAR){
+            if(TIMER[7].MONTH == p->MONTH){
+                if(TIMER[7].DAY == p->DAY){
+                    if(TIMER[7].HOUR == p->HOUR){
+                        if(TIMER[7].MINUTE == p->MINUTE){
+                            if(TIMER[7].SECOND == p->SECOND){
                                 relays.relay.RL8 = !(relays.relay.RL8);
+                                TimerFlag[7]=0;
                             }
                         }
                     }
