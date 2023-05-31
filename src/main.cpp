@@ -21,9 +21,9 @@ void setup(){
 
   /* Thực hiện nạp dữ liệu thời gian tại lúc build vào firmware */
   DS1307_time_update();
+  MenuDisplay(menu,select);
 
   relays.relayall = 0xFF;
-  // TimerFlag.Timerall = 0x00;
 }
 
 void loop(){
@@ -31,10 +31,12 @@ void loop(){
   DS1037_get_time();
   TIME *p;
   p=&DS1307_TIME;
+
   if(second_buff != p->SECOND){
     DS1307_time_store();
     second_buff = p->SECOND;
   }
+
   char chart = interrupts_getkey(keyChange);
   if(chart !='N'){
     if(chart == 'A') {
@@ -46,7 +48,7 @@ void loop(){
         case OnOffRelay: select = (select==1)?3:select-1; break;
         default: select = (select==0)?3:select-1;
 
-      }
+      } 
     }
 
     if(chart == 'D') {
@@ -68,7 +70,7 @@ void loop(){
       case 2: menu=(menu->Menulist2==NULL)?menu:menu->Menulist2; break;
       case 3: menu=(menu->Menulist3==NULL)?menu:menu->Menulist3; break;
       }
-    new_menu=1; 
+      new_menu=1; 
     }
 
     if(chart == 'B') {
@@ -79,54 +81,58 @@ void loop(){
     
     if(chart == '*') {
       if(chart == '*') delay(175);
-      ActualActivation(menu,select);
+      ActualActivation(menu, select);
       new_menu=1;
     }
 
-    if(new_menu) {  lcd.clear();  new_menu = 0; }
-    MenuDisplay(menu,select);
-    
-  }
-  ActivationDisplay(menu);
-  if(menu->MenuID==Main_Menu) LCD_print_time();
-  if(buffer != relays.relayall) {
-    RelayOut(RelayI2C, relays.relayall);
-    buffer = relays.relayall;
-  }
+    if(new_menu==1) {  lcd.clear();  new_menu = 0; 
+    }
 
-  Serial.println(relays.relayall, HEX);
-  for(int i=0 ; i<8 ; i++){
-    Serial.print("TIMER["); Serial.print(i); Serial.print("]: ");
-    Serial.print(TIMER[i].YEAR+2000, DEC);
-    Serial.print("/");
-    Serial.print(TIMER[i].MONTH, DEC);
-    Serial.print("/");
-    Serial.print(TIMER[i].DAY, DEC);
-    Serial.print("-");
-    Serial.print(TIMER[i].HOUR, DEC);
-    Serial.print(":");
-    Serial.print(TIMER[i].MINUTE, DEC);
-    Serial.print(":");
-    Serial.print(TIMER[i].SECOND, DEC);
-    Serial.print(" ");
-    Serial.print("Flag:");
-    Serial.print(TimerFlag[i]);
-    Serial.println(" ");
+    MenuDisplay(menu,select);
+    ActivationDisplay(menu);
   }
   
-  Serial.print("RTC:"); 
-    Serial.print(DS1307_TIME.YEAR+2000, DEC);
-    Serial.print("/");
-    Serial.print(DS1307_TIME.MONTH, DEC);
-    Serial.print("/");
-    Serial.print(DS1307_TIME.DAY, DEC);
-    Serial.print("-");
-    Serial.print(DS1307_TIME.HOUR, DEC);
-    Serial.print(":");
-    Serial.print(DS1307_TIME.MINUTE, DEC);
-    Serial.print(":");
-    Serial.print(DS1307_TIME.SECOND, DEC);
-    Serial.println(" ");
+  if(menu->MenuID==Main_Menu) LCD_print_time();
+
+  Serial.println(relays.relayall, HEX);
+  // for(int i=0 ; i<8 ; i++){
+  //   Serial.print("TIMER["); Serial.print(i); Serial.print("]: ");
+  //   Serial.print(TIMER[i].YEAR+2000, DEC);
+  //   Serial.print("/");
+  //   Serial.print(TIMER[i].MONTH, DEC);
+  //   Serial.print("/");
+  //   Serial.print(TIMER[i].DAY, DEC);
+  //   Serial.print("-");
+  //   Serial.print(TIMER[i].HOUR, DEC);
+  //   Serial.print(":");
+  //   Serial.print(TIMER[i].MINUTE, DEC);
+  //   Serial.print(":");
+  //   Serial.print(TIMER[i].SECOND, DEC);
+  //   Serial.print(" ");
+  //   Serial.print("Flag:");
+  //   Serial.print(TimerFlag[i]);
+  //   Serial.println(" ");
+  // }
+  
+  // Serial.print("RTC:"); 
+  //   Serial.print(DS1307_TIME.YEAR+2000, DEC);
+  //   Serial.print("/");
+  //   Serial.print(DS1307_TIME.MONTH, DEC);
+  //   Serial.print("/");
+  //   Serial.print(DS1307_TIME.DAY, DEC);
+  //   Serial.print("-");
+  //   Serial.print(DS1307_TIME.HOUR, DEC);
+  //   Serial.print(":");
+  //   Serial.print(DS1307_TIME.MINUTE, DEC);
+  //   Serial.print(":");
+  //   Serial.print(DS1307_TIME.SECOND, DEC);
+  //   Serial.println(" ");
     
-    RelayAuto();
+  if(TimerFlag[0]||TimerFlag[1]||TimerFlag[2]||TimerFlag[3]||TimerFlag[4]||TimerFlag[5]||TimerFlag[6]||TimerFlag[7]) RelayAuto(); 
+
+  if((buffer != relays.relayall)||TimerWrite) {
+    RelayOut(RelayI2C, relays.relayall);
+    buffer = relays.relayall;
+    TimerWrite=0;
+  }
 }
