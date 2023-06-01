@@ -567,34 +567,21 @@ void RelayAuto(){
     uint8_t readData[6] = {0};
     rtc.readnvram(readData, 6, 0);
 
-    if(TimerFlag[0]){
-        if(p->SECOND >= TIMER[0].SECOND){
-            if(p->MINUTE >= TIMER[0].MINUTE){
-                if(p->HOUR >= TIMER[0].HOUR){
-                    if(p->DAY >= TIMER[0].DAY){
-                        if(p->MONTH >= TIMER[0].MONTH){
-                            if(p->YEAR >= TIMER[0].YEAR){
-                                relays.relay.RL1 = !(relays.relay.RL1);
-                                TimerFlag[0]=0;
-                                TimerWrite=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    if(TimerFlag[1]){
-        if(p->SECOND >= TIMER[1].SECOND){
-            if(p->MINUTE >= TIMER[1].MINUTE){
-                if(p->HOUR >= TIMER[1].HOUR){
-                    if(p->DAY >= TIMER[1].DAY){
-                        if(p->MONTH >= TIMER[1].MONTH){
-                            if(p->YEAR >= TIMER[1].YEAR){
-                                relays.relay.RL2 = !(relays.relay.RL2);
-                                TimerFlag[1]=0;
-                                TimerWrite=1;
+    unsigned char ToggleFlag[8]={0};
+
+    for(int i=0; i<8; i++){
+        if(TimerFlag[i]){
+            if(p->SECOND >= TIMER[i].SECOND){
+                if(p->MINUTE >= TIMER[i].MINUTE){
+                    if(p->HOUR >= TIMER[i].HOUR){
+                        if(p->DAY >= TIMER[i].DAY){
+                            if(p->MONTH >= TIMER[i].MONTH){
+                                if(p->YEAR >= TIMER[i].YEAR){
+                                    ToggleFlag[i] = 1;
+                                    TimerFlag[i] = 0;
+                                    TimerWrite = 1;
+                                    new_menu = 1;
+                                }
                             }
                         }
                     }
@@ -603,113 +590,14 @@ void RelayAuto(){
         }
     }
 
-    if(TimerFlag[2]){
-        if(p->SECOND >= TIMER[2].SECOND){
-            if(p->MINUTE >= TIMER[2].MINUTE){
-                if(p->HOUR >= TIMER[2].HOUR){
-                    if(p->DAY >= TIMER[2].DAY){
-                        if(p->MONTH >= TIMER[2].MONTH){
-                            if(p->YEAR >= TIMER[2].YEAR){
-                                relays.relay.RL3 = !(relays.relay.RL3);
-                                TimerFlag[2]=0;
-                                TimerWrite=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if(TimerFlag[3]){
-        if(p->SECOND >= TIMER[3].SECOND){
-            if(p->MINUTE >= TIMER[3].MINUTE){
-                if(p->HOUR >= TIMER[3].HOUR){
-                    if(p->DAY >= TIMER[3].DAY){
-                        if(p->MONTH >= TIMER[3].MONTH){
-                            if(p->YEAR >= TIMER[3].YEAR){
-                                relays.relay.RL4 = !(relays.relay.RL4);
-                                TimerFlag[3]=0;
-                                TimerWrite=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if(TimerFlag[4]){
-        if(p->SECOND >= TIMER[4].SECOND){
-            if(p->MINUTE >= TIMER[4].MINUTE){
-                if(p->HOUR >= TIMER[4].HOUR){
-                    if(p->DAY >= TIMER[4].DAY){
-                        if(p->MONTH >= TIMER[4].MONTH){
-                            if(p->YEAR >= TIMER[4].YEAR){
-                                relays.relay.RL5 = !(relays.relay.RL5);
-                                TimerFlag[4]=0;
-                                TimerWrite=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if(TimerFlag[5]){
-        if(p->SECOND >= TIMER[5].SECOND){
-            if(p->MINUTE >= TIMER[5].MINUTE){
-                if(p->HOUR >= TIMER[5].HOUR){
-                    if(p->DAY >= TIMER[5].DAY){
-                        if(p->MONTH >= TIMER[5].MONTH){
-                            if(p->YEAR >= TIMER[5].YEAR){
-                                relays.relay.RL6 = !(relays.relay.RL6);
-                                TimerFlag[5]=0;
-                                TimerWrite=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if(TimerFlag[6]){
-        if(p->SECOND >= TIMER[6].SECOND){
-            if(p->MINUTE >= TIMER[6].MINUTE){
-                if(p->HOUR >= TIMER[6].HOUR){
-                    if(p->DAY >= TIMER[6].DAY){
-                        if(p->MONTH >= TIMER[6].MONTH){
-                            if(p->YEAR >= TIMER[6].YEAR){
-                                relays.relay.RL7 = !(relays.relay.RL7);
-                                TimerFlag[6]=0;
-                                TimerWrite=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if(TimerFlag[7]){
-        if(p->SECOND >= TIMER[7].SECOND){
-            if(p->MINUTE >= TIMER[7].MINUTE){
-                if(p->HOUR >= TIMER[7].HOUR){
-                    if(p->DAY >= TIMER[7].DAY){
-                        if(p->MONTH >= TIMER[7].MONTH){
-                            if(p->YEAR >= TIMER[7].YEAR){
-                                relays.relay.RL8 = !(relays.relay.RL8);
-                                TimerFlag[7]=0;
-                                TimerWrite=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    if(ToggleFlag[0]) relays.relay.RL1 = !(relays.relay.RL1);
+    if(ToggleFlag[1]) relays.relay.RL2 = !(relays.relay.RL2);
+    if(ToggleFlag[2]) relays.relay.RL3 = !(relays.relay.RL3);
+    if(ToggleFlag[3]) relays.relay.RL4 = !(relays.relay.RL4);
+    if(ToggleFlag[4]) relays.relay.RL5 = !(relays.relay.RL5);
+    if(ToggleFlag[5]) relays.relay.RL6 = !(relays.relay.RL6);
+    if(ToggleFlag[6]) relays.relay.RL7 = !(relays.relay.RL7);
+    if(ToggleFlag[7]) relays.relay.RL8 = !(relays.relay.RL8);
 }
 
 
