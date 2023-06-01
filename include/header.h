@@ -6,8 +6,6 @@
 #include <I2CKeyPad.h>
 #include <menu.h>
 
-
-
 /* Khởi tạo hàm suất ký tự đặc biệt */
 #if defined(ARDUINO) && ARDUINO >= 100
 #define printByte(args)  write(args);
@@ -73,7 +71,7 @@ void DS1307_init(){
         Serial.print("RTC is NOT running!");
         Serial.println("Check for RTC chip!");
     }
-    
+
     // /* Thực hiện nạp dữ liệu thời gian tại lúc build vào firmware thông qua kết nối USB */
     // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0)); //Thực hiện set giờ thủ công year|month|day|hour|minute|second
@@ -122,7 +120,6 @@ uint8_t clock[8] =    {0x00,0x0E,0x15,0x17,0x11,0x0E,0x00,0x00};
 uint8_t heart[8] =    {0x00,0x0A,0x1F,0x1F,0x0E,0x04,0x00,0x00};
 
 void LCD_startup(){
-    //lcd.init();       //Khởi động LCD bằng địa chỉ đã khai báo 
     lcd.begin(20,4);    //Khởi động LCD bằng địa chỉ đã khai báo                
     lcd.backlight();    // Bật đèn nền để cho LCD dễ nhìn trong đêm 
     lcd.clear();        //Thực hiện xóa mà hình LCD để tránh hiện tượng có dữ liệu tồn đọng
@@ -194,8 +191,7 @@ void LCD_print_time(){
 // IRQ var
 bool keyChange = false;
 const uint8_t KEYPAD_ADDRESS = 0x38;
-//char keymap[] = "123A456B789C*0#DNF";  // N = NoKey, F = Fail
-char keymap[] = "DCBA#9630852*741NF";  // N = NoKey, F = Fail
+char keymap[] = "DCBA#9630852*741NF"; /* = "123A456B789C*0#DNF"; */  // N = NoKey, F = Fail
 I2CKeyPad keyPad(KEYPAD_ADDRESS);
 
 void keyChanged(){  keyChange = true;   }
@@ -440,6 +436,10 @@ void ActualActivation(Menu *menu, int select){
 
     case OnOffRelay:
         if(select == 3) relays.relayall ^= 0xFF;
+        break;
+
+    case TimerRelay:
+        if(select == 3) for(int i=0; i<8; i++){ TimerFlag[i] = 0; };
         break;
     
     default:

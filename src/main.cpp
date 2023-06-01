@@ -18,7 +18,7 @@ void setup(){
   LCD_startup();
 
   LCD_SpecChars();
-  
+
   DS1307_time_update();
   MenuDisplay(menu,select);
 
@@ -45,6 +45,7 @@ void loop(){
         case Got_Title: select = (select==1)?3:select-1; break;
         case Main_Menu: select = (select==1)?3:select-1; break;
         case OnOffRelay: select = (select==1)?3:select-1; break;
+        case TimerRelay: select = (select==1)?3:select-1; break;
         default: select = (select==0)?3:select-1;
 
       } 
@@ -57,6 +58,7 @@ void loop(){
         case Got_Title: select = (select==3)?1:select+1; break;
         case Main_Menu: select = (select==3)?1:select+1; break;
         case OnOffRelay: select = (select==3)?1:select+1; break;
+        case TimerRelay: select = (select==3)?1:select+1; break;
         default: select = (select==3)?0:select+1;
       }
     }
