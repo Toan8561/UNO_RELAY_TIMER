@@ -73,6 +73,7 @@ void DS1307_init(){
         Serial.print("RTC is NOT running!");
         Serial.println("Check for RTC chip!");
     }
+    
     // /* Thực hiện nạp dữ liệu thời gian tại lúc build vào firmware thông qua kết nối USB */
     // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0)); //Thực hiện set giờ thủ công year|month|day|hour|minute|second
@@ -82,7 +83,6 @@ void DS1037_get_time(){
     TIME *p;
     DateTime now = rtc.now();
     p=&DS1307_TIME;
-    // p->WEEK_D=now.dayOfTheWeek();
     p->DAY= now.day();
     p->MONTH= now.month();
     p->YEAR=now.year()- 2000; //đọc năm, bỏ phần 20 trong 2000
@@ -120,12 +120,6 @@ uint8_t bell[8]  =    {0x04,0x0E,0x0E,0x0E,0x1F,0x00,0x04,0x00};
 uint8_t retarrow[8] = {0x10,0x10,0x14,0x12,0x1F,0x02,0x04,0x00};
 uint8_t clock[8] =    {0x00,0x0E,0x15,0x17,0x11,0x0E,0x00,0x00};
 uint8_t heart[8] =    {0x00,0x0A,0x1F,0x1F,0x0E,0x04,0x00,0x00};
-uint8_t battery[4][8]={
-                      {0x0E,0x1F,0x11,0x11,0x11,0x11,0x11,0x1F},
-                      {0x0E,0x1F,0x11,0x11,0x11,0x11,0x1F,0x1F},
-                      {0x0E,0x1F,0x11,0x11,0x1F,0x1F,0x1F,0x1F},
-                      {0x0E,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F}
-                        };
 
 void LCD_startup(){
     //lcd.init();       //Khởi động LCD bằng địa chỉ đã khai báo 
@@ -139,50 +133,41 @@ void LCD_SpecChars(){
     lcd.createChar(1, retarrow);
     lcd.createChar(2, clock);
     lcd.createChar(3, heart);
-    lcd.createChar(4, battery[0]);
-    lcd.createChar(5, battery[1]);
-    lcd.createChar(6, battery[2]);
-    lcd.createChar(7, battery[3]);
                     }
 
 /*LCD_date need 12-14 space in LCD*/
 void LCD_print_time(){
+
         DateTime now = rtc.now();
         TIME *p;
         p=&DS1307_TIME;
-        // int week= p->WEEK_D, day= p->DAY, month= p->MONTH, year=p->YEAR, hour= p->HOUR, minute= p->MINUTE; 
+
         int day= p->DAY, month= p->MONTH, year=p->YEAR, hour= p->HOUR, minute= p->MINUTE; 
-        int second= p->SECOND;
-        lcd.home(); //đưa con trỏ đến vị trí 0,0
+        int second= p->SECOND; 
+
         lcd.setCursor(9,0); 
         lcd.print("|");
         lcd.print(" ");
-        lcd.print(daysOfTheWeek[now.dayOfTheWeek()]);
-        // lcd.setCursor(4,0);
+        lcd.print(daysOfTheWeek[now.dayOfTheWeek()]); 
 
         lcd.setCursor(9,1);
         lcd.print("|");
+
         if (day <= 9){
             lcd.print("0");
             lcd.print(day);   }
         else lcd.print(day);
-
         lcd.print('/');
-
         if (month <= 9){
             lcd.print("0");
             lcd.print(month); }
         else lcd.print(month);
-
         lcd.print('/');
-
         if (year <= 9){
             lcd.print("0");
             lcd.print(year);   }
         else lcd.print(year);
     
-
-        // lcd.setCursor(13,0);
         lcd.setCursor(9,2);
         lcd.print("|");
         if (hour <= 9){
@@ -238,7 +223,6 @@ char interrupts_getkey(bool IRQ_flag){
 
 int getData() {
   String container = "";
-//   char last_chart;
   int cursor=1;
   lcd.setCursor(1, 1);
   while (true) {
@@ -247,20 +231,10 @@ int getData() {
     if (chart == '*') break;
     else if (isDigit(chart)) {
       container += chart;
-    //   last_chart = chart;
       cursor += 1;
       lcd.print(chart);
     }
-    // else if(chart == '#'){
-    //     container[cursor-1] = '\0';
 
-    //     cursor -=1;
-    //     cursor =(cursor==0)?1:(cursor);
-
-    //     lcd.setCursor(cursor,1);
-    //     lcd.print(" ");
-    //     lcd.setCursor(cursor,1);
-    // }
     else {
       //Nothing
     }

@@ -18,8 +18,7 @@ void setup(){
   LCD_startup();
 
   LCD_SpecChars();
-
-  /* Thực hiện nạp dữ liệu thời gian tại lúc build vào firmware */
+  
   DS1307_time_update();
   MenuDisplay(menu,select);
 
@@ -95,39 +94,7 @@ void loop(){
   if(menu->MenuID==Main_Menu) LCD_print_time();
 
   Serial.println(relays.relayall, HEX);
-  // for(int i=0 ; i<8 ; i++){
-  //   Serial.print("TIMER["); Serial.print(i); Serial.print("]: ");
-  //   Serial.print(TIMER[i].YEAR+2000, DEC);
-  //   Serial.print("/");
-  //   Serial.print(TIMER[i].MONTH, DEC);
-  //   Serial.print("/");
-  //   Serial.print(TIMER[i].DAY, DEC);
-  //   Serial.print("-");
-  //   Serial.print(TIMER[i].HOUR, DEC);
-  //   Serial.print(":");
-  //   Serial.print(TIMER[i].MINUTE, DEC);
-  //   Serial.print(":");
-  //   Serial.print(TIMER[i].SECOND, DEC);
-  //   Serial.print(" ");
-  //   Serial.print("Flag:");
-  //   Serial.print(TimerFlag[i]);
-  //   Serial.println(" ");
-  // }
   
-  // Serial.print("RTC:"); 
-  //   Serial.print(DS1307_TIME.YEAR+2000, DEC);
-  //   Serial.print("/");
-  //   Serial.print(DS1307_TIME.MONTH, DEC);
-  //   Serial.print("/");
-  //   Serial.print(DS1307_TIME.DAY, DEC);
-  //   Serial.print("-");
-  //   Serial.print(DS1307_TIME.HOUR, DEC);
-  //   Serial.print(":");
-  //   Serial.print(DS1307_TIME.MINUTE, DEC);
-  //   Serial.print(":");
-  //   Serial.print(DS1307_TIME.SECOND, DEC);
-  //   Serial.println(" ");
-    
   if(TimerFlag[0]||TimerFlag[1]||TimerFlag[2]||TimerFlag[3]||TimerFlag[4]||TimerFlag[5]||TimerFlag[6]||TimerFlag[7]) RelayAuto(); 
 
   if((buffer != relays.relayall)||TimerWrite) {
