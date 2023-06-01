@@ -261,9 +261,7 @@ int getData() {
     //     lcd.print(" ");
     //     lcd.setCursor(cursor,1);
     // }
-    else {
-      //Nothing
-    }
+    else { /*Nothing*/ }
   }
   return container.toInt();
 }
