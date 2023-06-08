@@ -30,7 +30,7 @@ Menu Manual = {
     &MainMenu,
     " MANUAL SETTING",NULL,
     "  ON/OFF RELAY ",&OnOffState,
-    "  CLOCK MOD SET",NULL,
+    "  CLOCK SET    ",NULL,
     "  ALARM SET    ",NULL,
 };
 
