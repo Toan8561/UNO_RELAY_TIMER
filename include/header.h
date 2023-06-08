@@ -114,7 +114,6 @@ void DS1307_time_update(){
 LiquidCrystal_I2C lcd(0X27,20,4); 
 /* Ký tự đặt biệt cho LCD */
 /* https://maxpromer.github.io/LCD-Character-Creator/ */
-uint8_t bell[8]  =    {0x04,0x0E,0x0E,0x0E,0x1F,0x00,0x04,0x00};
 uint8_t retarrow[8] = {0x10,0x10,0x14,0x12,0x1F,0x02,0x04,0x00};
 uint8_t clock[8] =    {0x00,0x0E,0x15,0x17,0x11,0x0E,0x00,0x00};
 
@@ -125,9 +124,8 @@ void LCD_startup(){
                     }
 
 void LCD_SpecChars(){
-    lcd.createChar(0, bell);
-    lcd.createChar(1, retarrow);
-    lcd.createChar(2, clock);
+    lcd.createChar(0, retarrow);
+    lcd.createChar(1, clock);
                     }
 
 /*LCD_date need 12-14 space in LCD*/
@@ -486,30 +484,30 @@ void ActivationDisplay(Menu *menu){
 
     case Relay14T:
         lcd.setCursor(12,0);
-        if(TimerFlag[0]) lcd.write(2);
+        if(TimerFlag[0]) lcd.write(1);
 
         lcd.setCursor(12,1);
-        if(TimerFlag[1]) lcd.write(2);
+        if(TimerFlag[1]) lcd.write(1);
 
         lcd.setCursor(12,2);
-        if(TimerFlag[2]) lcd.write(2);
+        if(TimerFlag[2]) lcd.write(1);
 
         lcd.setCursor(12,3);
-        if(TimerFlag[3]) lcd.write(2);
+        if(TimerFlag[3]) lcd.write(1);
         break;
     
     case Relay58T:
         lcd.setCursor(12,0);
-        if(TimerFlag[4]) lcd.write(2);
+        if(TimerFlag[4]) lcd.write(1);
 
         lcd.setCursor(12,1);
-        if(TimerFlag[5])lcd.write(2);
+        if(TimerFlag[5])lcd.write(1);
 
         lcd.setCursor(12,2);
-        if(TimerFlag[6]) lcd.write(2);
+        if(TimerFlag[6]) lcd.write(1);
 
         lcd.setCursor(12,3);
-        if(TimerFlag[7]) lcd.write(2);
+        if(TimerFlag[7]) lcd.write(1);
         break;
 
     case SetTime:
@@ -529,7 +527,7 @@ void MenuDisplay(Menu *menu, int select){
     lcd.setCursor(0,3); lcd.print(menu->List3);
 
     // lcd.setCursor(0,select); lcd.print(">");
-    lcd.setCursor(0,select); lcd.write(1);
+    lcd.setCursor(0,select); lcd.write(0);
 } 
 
 void RelayAuto(){
