@@ -117,7 +117,6 @@ LiquidCrystal_I2C lcd(0X27,20,4);
 uint8_t bell[8]  =    {0x04,0x0E,0x0E,0x0E,0x1F,0x00,0x04,0x00};
 uint8_t retarrow[8] = {0x10,0x10,0x14,0x12,0x1F,0x02,0x04,0x00};
 uint8_t clock[8] =    {0x00,0x0E,0x15,0x17,0x11,0x0E,0x00,0x00};
-uint8_t heart[8] =    {0x00,0x0A,0x1F,0x1F,0x0E,0x04,0x00,0x00};
 
 void LCD_startup(){
     lcd.begin(20,4);    //Khởi động LCD bằng địa chỉ đã khai báo                
@@ -129,7 +128,6 @@ void LCD_SpecChars(){
     lcd.createChar(0, bell);
     lcd.createChar(1, retarrow);
     lcd.createChar(2, clock);
-    lcd.createChar(3, heart);
                     }
 
 /*LCD_date need 12-14 space in LCD*/
